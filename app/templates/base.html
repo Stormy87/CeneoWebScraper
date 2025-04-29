@@ -10,7 +10,7 @@
    <header class="bg-primary text-white py-3">
        <div class="container text-center">
            <h1>Ceneo.pl Web Scraper</h1>
-           <p class="lead">Twoje narzędzie do analizy opinii i produktów</p>
+           <p class="lead">Narzędzie do analizy opinii i produktów</p>
        </div>
    </header>
    <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -22,22 +22,35 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Strona główna</a>
+                    <a class="nav-link active" aria-current="page" href="{{url_for('index')}}">Strona główna</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Lista produktów</a>
+                    <a class="nav-link" href="{{url_for('display_form')}}">Ekstrakcja opinii</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Ekstrakcja opinii</a>
+                    <a class="nav-link" href="{{url_for('products')}}">Lista produktów</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">O autorze</a>
+                    <a class="nav-link" href="{{url_for('author')}}">O autorze</a>
                 </li>
             </ul>
         </div>
     </div>
    </nav>
-   <section></section>
+   <section class="cointainer mt-5 mb-5">
+        <div class="row">
+            <h2 class="col text-center">
+                {% block title %}
+                {% endblock %}
+            </h2>
+        </div>
+        <div class="row">
+            <div class="col">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+   </section>
    <footer class="bg-dark text-white py-3 mt-4">
        <div class="container text-center">
            <p>&copy; 2025 Ceneo.pl Web Scraper. Wszelkie prawa zastrzeżone.</p>
