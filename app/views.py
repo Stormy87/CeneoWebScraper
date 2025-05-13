@@ -1,5 +1,6 @@
 import os
 import json
+import requests
 import pandas as pd
 from app import app
 from flask import render_template, redirect, url_for, request, send_file
@@ -15,6 +16,13 @@ def display_form():
 @app.route('/display_form', methods=['POST'])
 def extract_post():
     product_id = request.form.get('product_id')
+    return redirect(url_for('product', product_id=product_id))
+
+@app.route('/extract', methods=['POST'])
+def extract_data():
+    product_id = request.form.get('product_id')
+    url = f"https://www.ceneo.pl/{product_id}#tab=reviews"
+    response = requests.get(url)
     return redirect(url_for('product', product_id=product_id))
 
 # @app.route('/products')
@@ -40,14 +48,18 @@ def author():
 
 @app.route('/product/<int:product_id>')
 def product(product_id:int):
-  with open(f"app/data/opinions/{product_id}.json", 'r', encoding='utf-8') as jf:
-    try:
-      opinions = json.load(jf)
-    except json.JSONDecodeError:
-      error= "Nie pobrano danych"
-      return render_template("product.html", error=error)
-    opinions = pd.DataFrame.from_dict(opinions)
-    return render_template("product.html", opinions=opinions)
+  try:
+    with open(f"app/data/opinions/{product_id}.json", 'r', encoding='utf-8') as jf:
+      try:
+        opinions = json.load(jf)
+      except json.JSONDecodeError:
+        error= "Nie pobrano danych"
+        return render_template("product.html", error=error)
+      opinions = pd.DataFrame.from_dict(opinions)
+      return render_template("product.html", opinions=opinions)
+  except FileNotFoundError:
+    error = "Nie znaleziono pliku z danymi"
+  return render_template("product.html", error=error)
 
 @app.route('/download/<int:product_id>/<file_type>')
 def download_file(product_id, file_type):
