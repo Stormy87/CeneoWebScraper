@@ -14,6 +14,7 @@ Lista produktów
         <th>Liczba zalet</th>
         <th>Liczba wad</th>
         <th>Średnia ocen</th>
+        <th>Pobierz</th>
       </tr>
     </thead>
     <tbody>
@@ -28,6 +29,11 @@ Lista produktów
         <td>{{ product['pros_count'] }}</td>
         <td>{{ product['cons_count'] }}</td>
         <td>{{ product['average_stars'] | round(2) }}</td>
+        <td>
+          <a href="{{ url_for('download_file', product_id=product['product_id'], file_type='csv') }}" class="btn btn-sm btn-outline-primary">CSV</a>
+          <a href="{{ url_for('download_file', product_id=product['product_id'], file_type='xlsx') }}" class="btn btn-sm btn-outline-success">XLSX</a>
+          <a href="{{ url_for('download_file', product_id=product['product_id'], file_type='json') }}" class="btn btn-sm btn-outline-info">JSON</a>
+        </td>
       </tr>
       {% endfor %}
     </tbody>

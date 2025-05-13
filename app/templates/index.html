@@ -4,10 +4,38 @@ Opis projektu
 {% endblock %}
 
 {% block content %}
-<ul>
-  <li>Cel aplikacji</li>
-  <li>Opis działania aplikacji</li>
-  <li>Zastosowane biblioteki</li>
-  <li>Zastosowane podejścia</li>
-</ul>
+<style>
+body {
+      width: 100vw;
+      overflow-x: hidden;
+
+}
+.centered-list-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 58vh;
+    width: 100vw;
+    
+}
+.centered-list {
+    list-style-type: disc;
+    background: #f8f9fa;
+    padding: 40px 60px;
+    border-radius: 16px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    font-size: 1.2rem;
+}
+.centered-list li {
+    margin: 16px 0;
+}
+</style>
+<div class="centered-list-container">
+  <ul class="centered-list">
+    <li>Cel aplikacji</li>
+    <li>Opis działania aplikacji</li>
+    <li>Zastosowane biblioteki</li>
+    <li>Zastosowane podejścia</li>
+  </ul>
+</div>
 {% endblock %}

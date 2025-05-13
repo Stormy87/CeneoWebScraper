@@ -1,5 +1,6 @@
 import os
 import json
+import pandas as pd
 from app import app
 from flask import render_template, redirect, url_for, request, send_file
 
@@ -39,4 +40,18 @@ def author():
 
 @app.route('/product/<int:product_id>')
 def product(product_id:int):
-    return render_template("product.html", product_id=product_id)
+  with open(f"app/data/opinions/{product_id}.json", 'r', encoding='utf-8') as jf:
+    try:
+      opinions = json.load(jf)
+    except json.JSONDecodeError:
+      error= "Nie pobrano danych"
+      return render_template("product.html", error=error)
+    opinions = pd.DataFrame.from_dict(opinions)
+    return render_template("product.html", opinions=opinions)
+
+@app.route('/download/<int:product_id>/<file_type>')
+def download_file(product_id, file_type):
+    file_path = f"app/data/products/{product_id}.{file_type}"
+    if os.path.exists(file_path):
+        return send_file(file_path, as_attachment=True)
+    return "Plik nie istnieje", 404
