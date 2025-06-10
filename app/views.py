@@ -1,6 +1,6 @@
 import os
 import json
-import requests
+from flask import requests
 import pandas as pd
 import numpy as np
 from bs4 import BeautifulSoup
