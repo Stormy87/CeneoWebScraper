@@ -79,6 +79,9 @@ def extract_data():
     else:
       error = "Coś poszło nie tak"
       return render_template("extract.html", error=error)
+  else:
+      error = "Coś poszło nie tak"
+      return render_template("extract.html", error=error)
   if not os.path.exists("./app/data"):
     os.makedirs("./app/data")
   if not os.path.exists("./app/data/opinions"):
