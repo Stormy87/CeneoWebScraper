@@ -60,33 +60,35 @@ def extract_post():
 def extract_data():
   product_id = request.form.get('product_id')
   url = f"https://www.ceneo.pl/{product_id}#tab=reviews"
-  response = requests.get(url)
-  if response.status_code == 200:
-    page_dom = BeautifulSoup(response.text, 'html.parser')
-    opinions = page_dom.select('div.js_product-review:not(.user-post--highlight)')
-    if opinions:
-      all_opinions = []
-      for opinion in opinions:
-        single_opinion = {
-          key: extract(opinion, *value) for key, value in selectors.items()
-        }
-        all_opinions.append(single_opinion)
-    try:
-      url = "https://ceneo.pl"+extract(page_dom, "a.pagination__next", "href")
-    except TypeError:
-      url = None
-      if not os.path.exists("./app/data"):
-        os.makedirs("./app/data")
-      if not os.path.exists("./app/data/opinions"):
-        os.makedirs("./app/data/opinions")
-      with open(f"./app/data/opinions/{product_id}.json", 'w', encoding='utf-8') as file:
-        json.dump(all_opinions, file, ensure_ascii=False, indent=4)
-      return redirect(url_for('product', product_id=product_id))
+  while url:
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+      page_dom = BeautifulSoup(response.text, 'html.parser')
+      opinions = page_dom.select('div.js_product-review:not(.user-post--highlight)')
+      if opinions:
+        all_opinions = []
+        for opinion in opinions:
+          single_opinion = {
+            key: extract(opinion, *value) for key, value in selectors.items()
+          }
+          all_opinions.append(single_opinion)
+        try:
+          url = "https://ceneo.pl"+extract(page_dom, "a.pagination__next", "href")
+        except TypeError:
+          url = None
     else:
-        error = "Coś poszło nie tak"
-        return render_template("extract.html", error=error)
-  error = "Coś poszło nie tak"
-  return render_template("extract.html", error=error)
+      error = "Coś poszło nie tak"
+      return render_template("extract.html", error=error)
+  if not os.path.exists("./app/data"):
+    os.makedirs("./app/data")
+  if not os.path.exists("./app/data/opinions"):
+    os.makedirs("./app/data/opinions")
+  with open(f"./app/data/opinions/{product_id}.json", 'w', encoding='utf-8') as file:
+    json.dump(all_opinions, file, ensure_ascii=False, indent=4)
+  return redirect(url_for('product', product_id=product_id))
+
+    # error = "Coś poszło nie tak"
+    # return render_template("extract.html", error=error)
 
 
 # @app.route('/products')
